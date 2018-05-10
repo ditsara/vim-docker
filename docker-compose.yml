@@ -1,6 +1,6 @@
 version: '2'
 services:
   cli:
-    image: ditsara/devel:latest
+    image: ditsara/vim-docker:latest
     build:
       context: .
