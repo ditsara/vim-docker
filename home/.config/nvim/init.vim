@@ -14,6 +14,7 @@ set ttyfast             " Send more characters for redraws
 set tabstop=2           " 2-space tabs
 set shiftwidth=2        " size of an indent
 set expandtab           " always uses spaces instead of tab characters
+set mouse=a             " Enable mouse use in all modes
 set path+=**
 set wildmenu
 set shell=/bin/bash
