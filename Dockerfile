@@ -6,6 +6,7 @@ RUN apk --update --no-cache add \
     ctags \
     curl \
     git \
+    less \
     ncurses-terminfo \
     neovim \
     neovim-doc
