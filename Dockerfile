@@ -7,8 +7,8 @@ RUN apk --update --no-cache add \
     curl \
     git \
     ncurses-terminfo \
-    byobu \
-    vim
+    neovim \
+    neovim-doc
 
 # load bash-it and set aliases
 RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
@@ -19,13 +19,11 @@ RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
   sed -i 's/ash/bash/g' /etc/passwd && \
   mkdir /app
 
-ADD dotfiles /root
+ADD home /root
 
-RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
-  # install vim Vundle plugins
-  vim -E -u NONE -S ~/.vimrc +PluginInstall +qall > /dev/null || true && \
-  # set byobu ctrl-a behavior to "emacs" style
-  byobu-ctrl-a emacs
+RUN curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
+  nvim -E -u NONE -S ~/.config/nvim/init.vim +PlugInstall +qall > /dev/null || true
 
 WORKDIR /app
-CMD byobu
+CMD nvim
