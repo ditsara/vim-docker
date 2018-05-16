@@ -6,26 +6,39 @@ RUN apk --update --no-cache add \
     ctags \
     curl \
     git \
+    less \
     ncurses-terminfo \
-    byobu \
-    vim
+    neovim \
+    neovim-doc
 
-# load bash-it and set aliases
-RUN git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
-  ~/.bash_it/install.sh --silent && \
+ADD home /root
+
+RUN \
+  # load bash-it and set aliases
+  git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
+  ~/.bash_it/install.sh --silent --no-modify-config && \
   ln -s ~/.bash_it/aliases/available/git.aliases.bash ~/.bash_it/enabled/150---git.aliases.bash && \
   ln -s ~/.bash_it/aliases/available/vim.aliases.bash ~/.bash_it/enabled/150---vim.aliases.bash && \
   # set default shell to bash
   sed -i 's/ash/bash/g' /etc/passwd && \
-  mkdir /app
-
-ADD dotfiles /root
-
-RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim && \
-  # install vim Vundle plugins
-  vim -E -u NONE -S ~/.vimrc +PluginInstall +qall > /dev/null || true && \
-  # set byobu ctrl-a behavior to "emacs" style
-  byobu-ctrl-a emacs
+  mkdir /app && \
+  # install neovim plugin manager
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
+  # install neovim plugins
+  nvim -E -u NONE -S ~/.config/nvim/init.vim +PlugInstall +qall > /dev/null || true && \
+  # build, install universal-ctags
+  git clone http://github.com/universal-ctags/ctags.git ~/ctags && \
+  cd ~/ctags && \
+  apk --update --no-cache add --virtual build-deps \
+    autoconf make gcc automake musl-dev && \
+  ./autogen.sh && \
+  ./configure --program-prefix=u && \
+  make && make install && \
+  # cleanup
+  cd ~ && rm -rf ctags && \
+  apk del build-deps
 
 WORKDIR /app
-CMD byobu
+ENV DISPLAY=:0
+CMD nvim
