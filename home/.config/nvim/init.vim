@@ -52,7 +52,7 @@ vnoremap /* y:grep -rIn '<C-R>"'
 nnoremap <Leader>p :find<space>
 command! FileName let @+=@%
 
-" set clipboard=unnamedplus
+set clipboard=unnamedplus
 
 " enter command mode with semicolon
 map ; :
@@ -129,6 +129,8 @@ Plug 'tomtom/tlib_vim'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 
+" Tags
+Plug 'majutsushi/tagbar'
 
 " Initialize plugin system
 call plug#end()
@@ -141,6 +143,8 @@ let g:NERDTreeDirArrowCollapsible = '<'
 
 " Use git for faster indexing of Ctrl-P
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --exclude-standard']
+let g:tagbar_ctags_bin = 'uctags'
+map <Leader>r :TagbarToggle<CR>
 
 " COLORS
 " (NOTE: this section needs to come after vim-colorschemes is loaded)

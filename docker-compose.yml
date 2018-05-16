@@ -4,3 +4,7 @@ services:
     image: ditsara/vim-docker:latest
     build:
       context: .
+    volumes:
+      - /tmp:/tmp
+    environment:
+      - DISPLAY=:0
