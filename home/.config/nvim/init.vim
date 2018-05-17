@@ -61,6 +61,7 @@ set clipboard+=unnamedplus
 
 " regenerate tags
 nnoremap <C-[> :te uctags -R -f .git/tags .<CR>
+set notagrelative
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
