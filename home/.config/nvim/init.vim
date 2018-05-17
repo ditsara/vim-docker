@@ -52,11 +52,15 @@ vnoremap /* y:grep -rIn '<C-R>"'
 nnoremap <Leader>p :find<space>
 command! FileName let @+=@%
 
-set clipboard=unnamedplus
-
 " enter command mode with semicolon
 map ; :
 noremap ;; ;
+
+" use system clipboard
+set clipboard+=unnamedplus
+
+" regenerate tags
+nnoremap <C-[> :te uctags -R -f .git/tags .<CR>
 
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
@@ -160,7 +164,8 @@ map <Leader>r :TagbarToggle<CR>
 " colorscheme gotham256
 " colorscheme termschool
 " colorscheme umber-green
-colorscheme ubaryd
+" colorscheme ubaryd
+colorscheme up
 
 " These colorschemes might work with some adjustments to background
 " colorscheme bluez
