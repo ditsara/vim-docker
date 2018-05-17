@@ -12,8 +12,6 @@ RUN apk --update --no-cache add \
     neovim \
     neovim-doc
 
-ADD home /root
-
 RUN \
   # load bash-it and set aliases
   git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
@@ -26,8 +24,6 @@ RUN \
   # install neovim plugin manager
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim && \
-  # install neovim plugins
-  nvim -E -u NONE -S ~/.config/nvim/init.vim +PlugInstall +qall > /dev/null || true && \
   # build, install universal-ctags
   git clone http://github.com/universal-ctags/ctags.git ~/ctags && \
   cd ~/ctags && \
@@ -39,6 +35,11 @@ RUN \
   # cleanup
   cd ~ && rm -rf ctags && \
   apk del build-deps
+
+# add config files and install neovim plugins; separate layer so we don't need
+# to re-build everything when we change plugins or add files to home directory
+ADD home /root
+RUN nvim -E -u NONE -S ~/.config/nvim/init.vim +PlugInstall +qall > /dev/null || true
 
 WORKDIR /app
 ENV DISPLAY=:0
