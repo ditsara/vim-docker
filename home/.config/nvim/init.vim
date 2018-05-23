@@ -59,8 +59,13 @@ noremap ;; ;
 " use system clipboard
 set clipboard+=unnamedplus
 
-" regenerate tags
-nnoremap <C-[> :te uctags -R -f .git/tags .<CR>
+" regenerate tags function and shortcut
+function! RegenTags()
+  if filereadable(".git/tags")
+    te uctags -R -f .git/tags .
+  endif
+endfunction
+nnoremap <C-[> :call RegenTags()<CR>
 set notagrelative
 
 " Specify a directory for plugins
