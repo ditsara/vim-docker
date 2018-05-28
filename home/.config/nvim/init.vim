@@ -39,6 +39,8 @@ noremap <m-n> :bprev<CR>
 " alt-[ and alt-] switches tab pages
 noremap <m-u> :tabp<CR>
 noremap <m-i> :tabn<CR>
+" ctrl-w closes buffer w/o losing split
+noremap <C-w> :bp\|bd #<CR>
 " kj exits insert mode
 inoremap kj <Esc>
 vnoremap kj <Esc>
@@ -65,7 +67,10 @@ function! RegenTags()
     te uctags -R -f .git/tags .
   endif
 endfunction
-nnoremap <C-[> :call RegenTags()<CR>
+command RegenerateTags :call RegenTags()
+nnoremap <C-[> :tselect<CR>
+nnoremap <M-]> :tnext<CR>
+nnoremap <M-[> :tprev<CR>
 set notagrelative
 
 " Specify a directory for plugins
